@@ -6,4 +6,4 @@ The PuppeteerDecoupler repository consists of multiple microservices that allow 
 Publishes URLs to a RabbitMQ instance
 
 ## URLConsumer
-Consumers URLs from a RabbitMQ instance. Visits these URLs and dumps their HTML content to a downstream process.
+Consumes URLs from a RabbitMQ instance. Visits these URLs and dumps their HTML content to a downstream process.
