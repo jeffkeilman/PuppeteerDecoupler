@@ -20,6 +20,15 @@ const test = async () => {
 
   const client = await amqp.connect(connectionProperties)
   const channel = await client.createChannel()
+
+  // Create queue if it doesn't already exist to prevent errors when trying to consume
+  try {
+    channel.assertQueue(process.env.RMQ_QUEUE_NAME)
+  } catch (err) {
+    const errMessage = `Queue assertion failed: ${err}`
+    console.error(errMessage)
+    throw new Error(errMessage)
+  }
   channel.consume(process.env.RMQ_QUEUE_NAME, consumeMessage)
 }
 

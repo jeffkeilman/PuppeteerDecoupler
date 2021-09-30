@@ -1,5 +1,4 @@
 const amqp = require('amqplib')
-const process = require('process')
 
 class Publisher {
   constructor (args) {
@@ -8,6 +7,23 @@ class Publisher {
       console.error(errorMessage)
       throw new Error(errorMessage)
     }
+    if (
+      !args.rmqHostname ||
+      !args.rmqPort ||
+      !args.rmqUsername ||
+      !args.rmqPassword ||
+      !args.rmqQueueName ||
+      !(typeof args.rmqHostname === 'string') ||
+      !(typeof args.rmqPort === 'number') ||
+      !(typeof args.rmqUsername === 'string') ||
+      !(typeof args.rmqPassword === 'string') ||
+      !(typeof args.rmqQueueName === 'string')
+    ) {
+      const errorMessage = 'Publisher not initialized with correctly formatted arguments object'
+      console.error(errorMessage)
+      throw new Error(errorMessage)
+    }
+
     this.connectionProperties = {
       protocol: 'amqp',
       hostname: args.rmqHostname,
@@ -49,7 +65,18 @@ class Publisher {
   }
 
   sendMessage (msg) {
-    return this.channel.publish('', this.queue, Buffer.from(msg))
+    if (typeof msg !== 'string') {
+      const errMessage = 'RabbitMQ can only accept String messages!'
+      console.error(errMessage)
+      throw new Error(errMessage)
+    }
+    try {
+      this.channel.publish('', this.queue, Buffer.from(msg))
+    } catch (err) {
+      const errMessage = `Failed to publish message to ${this.queue}: ${err}`
+      console.error(errMessage)
+      throw new Error(errMessage)
+    }
   }
 
   closeChannel () {
@@ -57,33 +84,4 @@ class Publisher {
   }
 }
 
-const main = async () => {
-  const publisherArgs = {
-    rmqHostname: process.env.RMQ_HOSTNAME,
-    rmqUsername: process.env.RMQ_USERNAME,
-    rmqPassword: process.env.RMQ_PASSWORD,
-    rmqQueueName: process.env.RMQ_QUEUE_NAME,
-    rmqPort: Number(process.env.RMQ_PORT)
-  }
-  const publisher = new Publisher(publisherArgs)
-  await publisher.init()
-
-  const testObject = {
-    key: 'val'
-  }
-  setInterval(() => {
-    const testString = JSON.stringify(testObject)
-    console.log(`Sending: ${testString}`)
-    publisher.sendMessage(testString)
-  }, 10000)
-
-  process.on('exit', () => {
-    publisher.closeChannel()
-  })
-}
-
-if (require.main === module) {
-  main()
-}
-
-module.exports = { Publisher, main }
+module.exports = Publisher
