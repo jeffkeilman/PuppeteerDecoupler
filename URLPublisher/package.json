@@ -1,0 +1,30 @@
+{
+  "name": "urlpublisher",
+  "version": "1.0.0",
+  "description": "Publishes URL objects to a RabbitMQ queue",
+  "main": "Publisher.js",
+  "scripts": {
+    "test": "standard && jest",
+    "start": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeffkeilman/PuppeteerDecoupler.git#main"
+  },
+  "author": "Jeff Keilman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jeffkeilman/PuppeteerDecoupler/issues"
+  },
+  "homepage": "https://github.com/jeffkeilman/PuppeteerDecoupler/tree/main#readme",
+  "dependencies": {
+    "amqplib": "^0.8.0"
+  },
+  "engines": {
+    "node": "16.5"
+  },
+  "devDependencies": {
+    "jest": "^27.2.0",
+    "standard": "7.19.1"
+  }
+}
