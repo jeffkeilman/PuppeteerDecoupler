@@ -64,14 +64,32 @@ class Publisher {
     }
   }
 
-  sendMessage (msg) {
-    if (typeof msg !== 'string') {
-      const errMessage = 'RabbitMQ can only accept String messages!'
+  sendMessage (urlList) {
+    if (!Array.isArray(urlList)) {
+      const errMessage = `Type mismatch: sendMessage expected an array of URL objects, but instead got: ${typeof urlList}`
       console.error(errMessage)
       throw new Error(errMessage)
     }
+    // filter out non-URL objects
+    const filteredUrlList = urlList.filter((url) =>
+      (
+        url &&
+        // checks for existence of key and datatype of val
+        typeof url.name === 'string' &&
+        typeof url.url === 'string' &&
+        Object.keys(url).length === 2
+      )
+    )
+
+    if (!filteredUrlList.length) {
+      const errMessage = 'sendMessage received a list with no valid URL objects'
+      console.error(errMessage)
+      throw new Error(errMessage)
+    }
+
     try {
-      this.channel.publish('', this.queue, Buffer.from(msg))
+      const urlListStr = JSON.stringify(filteredUrlList)
+      this.channel.publish('', this.queue, Buffer.from(urlListStr))
     } catch (err) {
       const errMessage = `Failed to publish message to ${this.queue}: ${err}`
       console.error(errMessage)

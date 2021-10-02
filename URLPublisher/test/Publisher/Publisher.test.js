@@ -217,14 +217,40 @@ describe('The Publisher', () => {
 
     it('should send a message', async () => {
       await testPublisher.init()
-      testPublisher.sendMessage('foo')
-      expect(mockPublish).toHaveBeenCalledWith('', 'buzz', Buffer.from('foo'))
+      testPublisher.sendMessage([{
+        url: 'foo',
+        name: 'bar'
+      }])
+      expect(mockPublish).toHaveBeenCalledWith('', 'buzz', Buffer.from('[{"url":"foo","name":"bar"}]'))
       expect(mockPublish).toHaveBeenCalledTimes(1)
     })
 
-    it('should throw an error when anything other than a string is passed as an argument', async () => {
+    it('should filter bad objects but send good ones', async () => {
       await testPublisher.init()
-      expect(() => testPublisher.sendMessage(1)).toThrow('RabbitMQ can only accept String messages!')
+      testPublisher.sendMessage([
+        { foo: 'bar' },
+        { url: 'foo', name: 'bar' }
+      ])
+      expect(mockPublish).toHaveBeenCalledWith('', 'buzz', Buffer.from('[{"url":"foo","name":"bar"}]'))
+      expect(mockPublish).toHaveBeenCalledTimes(1)
+    })
+
+    it('should throw an error when anything other than an array is passed as an argument', async () => {
+      await testPublisher.init()
+      expect(() => testPublisher.sendMessage(1))
+        .toThrow('Type mismatch: sendMessage expected an array of URL objects, but instead got: number')
+    })
+
+    it('should throw an error when an empty array is passed as an argument', async () => {
+      await testPublisher.init()
+      expect(() => testPublisher.sendMessage([]))
+        .toThrow('sendMessage received a list with no valid URL objects')
+    })
+
+    it('should throw an error when an array with only bad objects is passed as an argument', async () => {
+      await testPublisher.init()
+      expect(() => testPublisher.sendMessage([{ foo: 'bar' }]))
+        .toThrow('sendMessage received a list with no valid URL objects')
     })
 
     it('should throw an error when publishing fails', async () => {
@@ -233,7 +259,7 @@ describe('The Publisher', () => {
         throw new Error('foo')
       })
 
-      expect(() => testPublisher.sendMessage('foo')).toThrow('Failed to publish message to buzz: Error: foo')
+      expect(() => testPublisher.sendMessage([{ url: 'foo', name: 'bar' }])).toThrow('Failed to publish message to buzz: Error: foo')
       mockPublishImplementation.mockRestore()
     })
   })

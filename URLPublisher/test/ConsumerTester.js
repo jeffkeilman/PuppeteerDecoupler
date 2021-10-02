@@ -1,8 +1,8 @@
 const amqp = require('amqplib')
 
 const consumeMessage = (msg) => {
-  const msgObj = JSON.parse(msg.content.toString('utf-8'))
-  console.log(`Here is the key: ${msgObj.key}`)
+  const msgArr = JSON.parse(msg.content.toString('utf-8'))
+  msgArr.forEach((url) => console.log(`URL url: ${url.url}, URL name: ${url.name}`))
 }
 
 const test = async () => {
