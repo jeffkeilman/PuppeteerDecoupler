@@ -225,11 +225,41 @@ describe('The Publisher', () => {
       expect(mockPublish).toHaveBeenCalledTimes(1)
     })
 
+    it('should send a message with multiple URL objects', async () => {
+      await testPublisher.init()
+      testPublisher.sendMessage([
+        { url: 'foo', name: 'bar' },
+        { url: 'fizz', name: 'buzz' }
+      ])
+      expect(mockPublish).toHaveBeenCalledWith('', 'buzz', Buffer.from('[{"url":"foo","name":"bar"},{"url":"fizz","name":"buzz"}]'))
+      expect(mockPublish).toHaveBeenCalledTimes(1)
+    })
+
     it('should filter bad objects but send good ones', async () => {
       await testPublisher.init()
       testPublisher.sendMessage([
         { foo: 'bar' },
         { url: 'foo', name: 'bar' }
+      ])
+      expect(mockPublish).toHaveBeenCalledWith('', 'buzz', Buffer.from('[{"url":"foo","name":"bar"}]'))
+      expect(mockPublish).toHaveBeenCalledTimes(1)
+    })
+
+    it('should prevent you from sending URL objects with additional keys', async () => {
+      await testPublisher.init()
+      testPublisher.sendMessage([
+        { url: 'foo', name: 'bar' },
+        { url: 'fizz', name: 'buzz', oops: 'extrakey' }
+      ])
+      expect(mockPublish).toHaveBeenCalledWith('', 'buzz', Buffer.from('[{"url":"foo","name":"bar"}]'))
+      expect(mockPublish).toHaveBeenCalledTimes(1)
+    })
+
+    it('should prevent you from sending URL objects with bad datatypes', async () => {
+      await testPublisher.init()
+      testPublisher.sendMessage([
+        { url: 'foo', name: 'bar' },
+        { url: 1, name: 2 }
       ])
       expect(mockPublish).toHaveBeenCalledWith('', 'buzz', Buffer.from('[{"url":"foo","name":"bar"}]'))
       expect(mockPublish).toHaveBeenCalledTimes(1)
