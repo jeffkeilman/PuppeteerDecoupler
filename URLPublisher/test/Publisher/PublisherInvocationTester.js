@@ -1,6 +1,6 @@
 const Publisher = require('../../Publisher')
 
-const main = async (messageObj) => {
+const main = async (messageArr) => {
   const publisherArgs = {
     rmqHostname: process.env.RMQ_HOSTNAME,
     rmqUsername: process.env.RMQ_USERNAME,
@@ -12,9 +12,8 @@ const main = async (messageObj) => {
   await publisher.init()
 
   setInterval(() => {
-    const messageString = JSON.stringify(messageObj)
-    console.log(`Sending: ${messageString}`)
-    publisher.sendMessage(messageString)
+    console.log(`Sending: ${messageArr}`)
+    publisher.sendMessage(messageArr)
   }, 10000)
 
   process.on('exit', () => {
@@ -23,5 +22,8 @@ const main = async (messageObj) => {
 }
 
 if (require.main === module) {
-  main({ key: 'val' })
+  main([
+    { url: 'https://www.google.com', name: 'Google' },
+    { url: 'https://www.newegg.com', name: 'Newegg' }
+  ])
 }
