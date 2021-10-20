@@ -1,7 +1,7 @@
 {
   "name": "urlconsumer",
   "version": "1.0.0",
-  "description": "Consumes custom URL objects from RabbitMQ and visits those URLs, returning their HTML content for downstream processes",
+  "description": "Consumes custom URL objects from RabbitMQ and visits those URLs, persisting their HTML content for downstream processes",
   "main": "Consumer.js",
   "scripts": {
     "test": "standard && jest"
@@ -19,6 +19,9 @@
   "devDependencies": {
     "jest": "^27.2.4",
     "standard": "^16.0.4"
+  },
+  "engines": {
+    "node": "16.5"
   },
   "dependencies": {
     "amqplib": "^0.8.0",
