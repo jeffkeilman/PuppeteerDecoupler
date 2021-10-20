@@ -1,0 +1,30 @@
+{
+  "name": "urlconsumer",
+  "version": "1.0.0",
+  "description": "Consumes custom URL objects from RabbitMQ and visits those URLs, persisting their HTML content for downstream processes",
+  "main": "Consumer.js",
+  "scripts": {
+    "test": "standard && jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeffkeilman/PuppeteerDecoupler.git#main"
+  },
+  "author": "Jeff Keilman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jeffkeilman/PuppeteerDecoupler/issues"
+  },
+  "homepage": "https://github.com/jeffkeilman/PuppeteerDecoupler/tree/main#readme",
+  "devDependencies": {
+    "jest": "^27.2.4",
+    "standard": "^16.0.4"
+  },
+  "engines": {
+    "node": "16.5"
+  },
+  "dependencies": {
+    "amqplib": "^0.8.0",
+    "puppeteer": "^10.4.0"
+  }
+}

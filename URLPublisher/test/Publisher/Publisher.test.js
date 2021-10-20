@@ -173,7 +173,7 @@ describe('The Publisher', () => {
       try {
         testPublisher.init()
       } catch (e) {
-        expect(e).toBe('Channel creation on RabbitMQ instance failed: Error: foo')
+        expect(e.toString()).toBe('Channel creation on RabbitMQ instance failed: Error: foo')
       }
       mockCreateChannelImplementation.mockRestore()
     })
@@ -199,7 +199,7 @@ describe('The Publisher', () => {
       try {
         testPublisher.init()
       } catch (e) {
-        expect(e).toBe('Queue assertion failed: Error: foo')
+        expect(e.toString()).toBe('Queue assertion failed: Error: foo')
       }
       mockQueueAssertionImplementation.mockRestore()
     })
