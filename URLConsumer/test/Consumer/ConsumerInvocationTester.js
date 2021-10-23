@@ -2,6 +2,7 @@ const Consumer = require('../../Consumer')
 
 const main = async () => {
   const myDataPersistenceClosure = (messageArr) => {
+    // in all reality, this function should parse/persist results
     messageArr.forEach((msg) => console.log(msg))
   }
   const consumerArgs = {
