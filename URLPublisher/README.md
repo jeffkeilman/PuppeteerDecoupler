@@ -10,7 +10,7 @@ const publisherTest = async () => {
     rmqHostname: 'Rabbit MQ Hostname',
     rmqUsername: 'Rabbit MQ Username',
     rmqPassword: 'Rabbit MQ Password',
-    rmqQueueName: 'Rabbit MQ Queue Name,
+    rmqQueueName: 'Rabbit MQ Queue Name',
     rmqPort: Number('Rabbit MQ Port Number')
   }
   const publisher = new Publisher(publisherArgs)
