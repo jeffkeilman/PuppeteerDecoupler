@@ -1,6 +1,6 @@
 const amqp = require('amqplib')
 
-const PuppeteerWrapper = require('./src/PuppeteerWrapper/PuppeteerWrapper')
+const PuppeteerWrapper = require('@jswebscraper/puppeteerwrapper')
 
 class Consumer {
   constructor (args) {

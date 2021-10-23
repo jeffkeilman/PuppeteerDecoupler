@@ -24,7 +24,7 @@
     "node": "16.5"
   },
   "dependencies": {
-    "amqplib": "^0.8.0",
-    "puppeteer": "^10.4.0"
+    "@jswebscraper/puppeteerwrapper": "^0.0.1",
+    "amqplib": "^0.8.0"
   }
 }

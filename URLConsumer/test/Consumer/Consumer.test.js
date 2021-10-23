@@ -1,6 +1,6 @@
 /* eslint-env jest */
 const Consumer = require('../../Consumer')
-const PuppeteerWrapper = require('../../src/PuppeteerWrapper/PuppeteerWrapper')
+const PuppeteerWrapper = require('@jswebscraper/puppeteerwrapper')
 
 const mockChannel = {
   assertQueue () {
@@ -51,7 +51,7 @@ jest.mock('amqplib', () => ({
   }
 }))
 
-jest.mock('../../src/PuppeteerWrapper/PuppeteerWrapper')
+jest.mock('@jswebscraper/puppeteerwrapper')
 
 describe('The Consumer', () => {
   beforeAll(() => {
